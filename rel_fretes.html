@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatórios de Fretes</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <div class="container-full">
+      <h2>Relatório de Fretes</h2>
+
+      <label for="filtroData">Filtrar por Data:</label>
+      <input type="month" id="filtroData" />
+
+      <div style="display: flex; gap: 20px; margin-top: 20px">
+        <canvas id="graficoClientes" height="100"></canvas>
+        <canvas id="graficoCavalos" height="100"></canvas>
+      </div>
+
+      <h3>Fretes por Cliente</h3>
+      <table id="tabelaClientes">
+        <thead>
+          <tr>
+            <th>Cliente</th>
+            <th>Qtd Fretes</th>
+            <th>Valor Total</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <br />
+      <button onclick="window.location.href='relatorios.html'">
+        ⬅️ Voltar aos Relatórios
+      </button>
+    </div>
+
+    <script src="rel_fretes.js"></script>
+  </body>
+</html>

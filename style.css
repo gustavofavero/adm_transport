@@ -77,3 +77,25 @@ table th select {
   font-size: 13px;
   padding: 4px;
 }
+
+.relatorio-botoes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+}
+
+.relatorio-botoes button {
+  flex: 1 1 200px;
+  padding: 20px;
+  font-size: 18px;
+  border-radius: 8px;
+  background-color: #333;
+  color: #fff;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.relatorio-botoes button:hover {
+  background-color: #111;
+}

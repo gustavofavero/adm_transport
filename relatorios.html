@@ -2,29 +2,32 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <title>Relatórios</title>
+    <title>Menu de Relatórios</title>
     <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
-    <script>
-      if (!localStorage.getItem("usuarioLogado")) {
-        window.location.href = "login.html";
-      }
-    </script>
+    <div class="container-full">
+      <h2>Relatórios</h2>
 
-    <div class="container">
-      <h2>Relatórios Gerenciais</h2>
-
-      <canvas id="graficoFretes" height="100"></canvas>
-      <canvas id="graficoManutencao" height="100"></canvas>
+      <div class="relatorio-botoes">
+        <button onclick="window.location.href='rel_fretes.html'">
+          📦 Fretes
+        </button>
+        <button onclick="window.location.href='rel_manutencao.html'">
+          🔧 Manutenção
+        </button>
+        <button onclick="window.location.href='rel_abastecimento.html'">
+          ⛽ Abastecimento
+        </button>
+        <button onclick="window.location.href='rel_fluxo.html'">
+          📊 Receitas x Despesas
+        </button>
+      </div>
 
       <br />
       <button onclick="window.location.href='index.html'">
-        Voltar ao Menu
+        ⬅️ Voltar ao Menu
       </button>
     </div>
-
-    <script src="relatorios.js"></script>
   </body>
 </html>
