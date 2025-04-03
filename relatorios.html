@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatórios</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  </head>
+  <body>
+    <script>
+      if (!localStorage.getItem("usuarioLogado")) {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <div class="container">
+      <h2>Relatórios Gerenciais</h2>
+
+      <canvas id="graficoFretes" height="100"></canvas>
+      <canvas id="graficoManutencao" height="100"></canvas>
+
+      <br />
+      <button onclick="window.location.href='index.html'">
+        Voltar ao Menu
+      </button>
+    </div>
+
+    <script src="relatorios.js"></script>
+  </body>
+</html>

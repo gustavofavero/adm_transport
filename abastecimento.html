@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Controle de Abastecimento</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script>
+      if (!localStorage.getItem("usuarioLogado")) {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <div class="container">
+      <h2>Abastecimento</h2>
+
+      <form id="abastecimentoForm">
+        <input type="date" id="data" required />
+        <select id="placa" required>
+          <option value="">Selecione a Placa</option>
+        </select>
+        <input type="number" id="km" placeholder="KM Atual" required />
+        <input
+          type="text"
+          id="tanqueCheio"
+          placeholder="Tanque Cheio? (Sim/Não)"
+          required
+        />
+        <input type="text" id="fornecedor" placeholder="Fornecedor" required />
+        <input
+          type="number"
+          id="litros"
+          placeholder="Litros Abastecidos"
+          required
+        />
+        <input
+          type="number"
+          id="valor"
+          placeholder="Valor Total (R$)"
+          step="0.01"
+          required
+        />
+        <button type="submit">Salvar</button>
+      </form>
+
+      <hr />
+      <h3>Registros de Abastecimento</h3>
+      <ul id="listaAbastecimento"></ul>
+
+      <br />
+      <button onclick="window.location.href='index.html'">
+        Voltar ao Menu
+      </button>
+    </div>
+
+    <script src="abastecimento.js"></script>
+  </body>
+</html>

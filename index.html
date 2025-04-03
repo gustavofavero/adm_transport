@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Menu Principal - Sistema Transportadora</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script>
+      if (!localStorage.getItem("usuarioLogado")) {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <div class="container">
+      <h1>Menu Principal</h1>
+      <p>
+        Usuário:
+        <strong
+          ><script>
+            document.write(localStorage.getItem("usuarioLogado"));
+          </script></strong
+        >
+      </p>
+
+      <button onclick="window.location.href='fretes.html'">
+        Lançamentos de Fretes
+      </button>
+      <button onclick="window.location.href='manutencao.html'">
+        Manutenção
+      </button>
+      <button onclick="window.location.href='abastecimento.html'">
+        Abastecimento
+      </button>
+      <button onclick="window.location.href='cadastro.html'">Cadastros</button>
+      <button onclick="window.location.href='relatorios.html'">
+        Relatórios
+      </button>
+      <button onclick="sair()">Sair</button>
+    </div>
+
+    <script>
+      function sair() {
+        localStorage.removeItem("usuarioLogado");
+        window.location.href = "login.html";
+      }
+    </script>
+  </body>
+</html>

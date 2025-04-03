@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Cadastro de Dados Fixos</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script>
+      if (!localStorage.getItem("usuarioLogado")) {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <div class="container">
+      <h2>Cadastros Fixos</h2>
+
+      <h3>Clientes</h3>
+      <form id="formCliente">
+        <input
+          type="text"
+          id="clienteNome"
+          placeholder="Nome do Cliente"
+          required
+        />
+        <button type="submit">Salvar Cliente</button>
+      </form>
+      <ul id="listaClientes"></ul>
+
+      <h3>Motoristas</h3>
+      <form id="formMotorista">
+        <input
+          type="text"
+          id="motoristaNome"
+          placeholder="Nome do Motorista"
+          required
+        />
+        <button type="submit">Salvar Motorista</button>
+      </form>
+      <ul id="listaMotoristas"></ul>
+
+      <h3>Placas</h3>
+      <form id="formPlaca">
+        <input
+          type="text"
+          id="placaVeiculo"
+          placeholder="Placa (ABC1234)"
+          required
+        />
+        <select id="tipoPlaca" required>
+          <option value="">Tipo</option>
+          <option value="CAVALO">CAVALO</option>
+          <option value="CARRETA">CARRETA</option>
+        </select>
+        <select id="statusPlaca" required>
+          <option value="">Status</option>
+          <option value="ATIVO">ATIVO</option>
+          <option value="INATIVO">INATIVO</option>
+        </select>
+        <button type="submit">Salvar Placa</button>
+      </form>
+      <ul id="listaPlacas"></ul>
+
+      <br />
+      <button onclick="window.location.href='index.html'">
+        Voltar ao Menu
+      </button>
+    </div>
+
+    <script src="cadastro.js"></script>
+  </body>
+</html>

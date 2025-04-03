@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lançamento de Fretes</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <script>
+      if (!localStorage.getItem("usuarioLogado")) {
+        window.location.href = "login.html";
+      }
+    </script>
+
+    <div class="container-full">
+      <h2>Lançamento de Fretes</h2>
+
+      <form id="freteForm" class="grid-form">
+        <input type="date" id="data" required />
+        <select id="cliente" required>
+          <option value="">Cliente</option>
+        </select>
+        <input type="text" id="cte" placeholder="CTe ou NC" required />
+        <span style="grid-column: span 3; font-size: 12px; color: gray">
+          Digite o número do CTe ou "NC" se não emitido.
+        </span>
+
+        <input
+          type="number"
+          id="peso"
+          placeholder="Peso (Ton)"
+          step="0.01"
+          required
+        />
+        <input
+          type="text"
+          id="freteLiquido"
+          placeholder="Frete Líquido (R$)"
+          required
+        />
+        <input
+          type="text"
+          id="freteTotal"
+          placeholder="Frete Total (R$)"
+          required
+        />
+
+        <input
+          type="number"
+          id="pedagio"
+          placeholder="Pedágio (R$)"
+          step="0.01"
+        />
+        <input type="number" id="icms" placeholder="ICMS (R$)" step="0.01" />
+        <div></div>
+
+        <div class="uf-cidade-line">
+          <select id="ufOrigem" required>
+            <option value="">UF Origem</option>
+          </select>
+          <select id="cidadeOrigem" required>
+            <option value="">Cidade Origem</option>
+          </select>
+          <select id="ufDestino" required>
+            <option value="">UF Destino</option>
+          </select>
+          <select id="cidadeDestino" required>
+            <option value="">Cidade Destino</option>
+          </select>
+        </div>
+
+        <select id="motorista" required>
+          <option value="">Motorista</option>
+        </select>
+        <select id="placaCavalo" required>
+          <option value="">Cavalo (somente ativos)</option>
+        </select>
+        <button type="submit" style="grid-column: span 3">Salvar</button>
+      </form>
+
+      <hr />
+      <h3>Fretes Lançados</h3>
+      <table id="tabelaFretes">
+        <thead>
+          <tr>
+            <th>
+              Data<br /><select data-col="0">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              Cliente<br /><select data-col="1">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              CTe<br /><select data-col="2">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              Total (R$)<br /><select data-col="3">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              Origem<br /><select data-col="4">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              Destino<br /><select data-col="5">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              Motorista<br /><select data-col="6">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>
+              Cavalo<br /><select data-col="7">
+                <option value="">Todos</option>
+              </select>
+            </th>
+            <th>Ações</th>
+          </tr>
+        </thead>
+        <tbody id="listaFretes"></tbody>
+      </table>
+
+      <br />
+      <button onclick="window.location.href='index.html'">
+        Voltar ao Menu
+      </button>
+    </div>
+
+    <script src="ufs_cidades.js"></script>
+    <script src="fretes.js"></script>
+  </body>
+</html>
