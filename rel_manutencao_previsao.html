@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Revisões Próximas</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Veículos com Revisão Próxima</h2>
+      <label>Tolerância de KM (padrão 1000):</label>
+      <input type="number" id="tolerancia" value="1000" min="0" />
+      <button onclick="verificar()">Verificar</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>KM Atual</th>
+            <th>Próxima Revisão</th>
+            <th>Faltam (KM)</th>
+            <th>Data Última</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaRevisao"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="window.location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function verificar() {
+        const tolerancia = parseInt(
+          document.getElementById("tolerancia").value
+        );
+        const dados = JSON.parse(
+          localStorage.getItem("manutencoes") || "[]"
+        ).filter((m) => m.proximaRevisao);
+
+        const tbody = document.getElementById("tabelaRevisao");
+        tbody.innerHTML = "";
+
+        dados.forEach((m) => {
+          const restante = m.proximaRevisao - m.km;
+          if (restante <= tolerancia) {
+            tbody.innerHTML += `
+            <tr>
+              <td>${m.placa}</td>
+              <td>${m.tipo}</td>
+              <td>${m.km}</td>
+              <td>${m.proximaRevisao}</td>
+              <td>${restante <= 0 ? "VENCIDA" : restante}</td>
+              <td>${m.data}</td>
+            </tr>
+          `;
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

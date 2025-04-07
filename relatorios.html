@@ -2,32 +2,89 @@
 <html lang="pt-br">
   <head>
     <meta charset="UTF-8" />
-    <title>Menu de Relatórios</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Relatórios</title>
+    <link rel="stylesheet" href="relatorios.css" />
   </head>
   <body>
-    <div class="container-full">
-      <h2>Relatórios</h2>
-
-      <div class="relatorio-botoes">
-        <button onclick="window.location.href='rel_fretes.html'">
-          📦 Fretes
-        </button>
-        <button onclick="window.location.href='rel_manutencao.html'">
-          🔧 Manutenção
-        </button>
-        <button onclick="window.location.href='rel_abastecimento.html'">
-          ⛽ Abastecimento
-        </button>
-        <button onclick="window.location.href='rel_fluxo.html'">
-          📊 Receitas x Despesas
+    <div class="container">
+      <div class="secao">
+        <h2>Relatórios de Fretes</h2>
+        <button class="btn-rel" onclick="location.href='rel_fretes.html'">
+          📦 Relatório de Fretes
         </button>
       </div>
 
-      <br />
-      <button onclick="window.location.href='index.html'">
-        ⬅️ Voltar ao Menu
-      </button>
+      <div class="secao">
+        <h2>Relatórios de Abastecimento</h2>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_abastecimento_consumo.html'"
+        >
+          ⛽ KM/L por Placa
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_abastecimento_financeiro.html'"
+        >
+          💰 Gasto por Placa
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_abastecimento_fornecedor.html'"
+        >
+          🏪 Por Fornecedor
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_abastecimento_detalhado.html'"
+        >
+          📋 Detalhado
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_abastecimento_ranking.html'"
+        >
+          🏆 Ranking Eficiência
+        </button>
+      </div>
+
+      <div class="secao">
+        <h2>Relatórios de Manutenção</h2>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_manutencao_detalhado.html'"
+        >
+          🛠️ Detalhado
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_manutencao_financeiro.html'"
+        >
+          💸 Por Oficina
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_manutencao_tipo.html'"
+        >
+          🔧 Por Tipo
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_manutencao_ranking.html'"
+        >
+          🚛 Ranking Placas
+        </button>
+        <button
+          class="btn-rel"
+          onclick="location.href='rel_manutencao_previsao.html'"
+        >
+          📆 Revisões
+        </button>
+      </div>
+
+      <div class="voltar">
+        <button onclick="location.href='index.html'">⬅️ Voltar ao Menu</button>
+      </div>
     </div>
   </body>
 </html>

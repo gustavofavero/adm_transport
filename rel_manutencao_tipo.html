@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Resumo por Tipo de Manutenção</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Resumo por Tipo de Manutenção</h2>
+      <label>Período:</label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerar()">Gerar</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Tipo de Manutenção</th>
+            <th>Quantidade</th>
+            <th>Valor Total</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaTipos"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerar() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const dados = JSON.parse(
+          localStorage.getItem("manutencoes") || "[]"
+        ).filter(
+          (m) => (!inicio || m.data >= inicio) && (!fim || m.data <= fim)
+        );
+
+        const tipos = {};
+
+        dados.forEach((m) => {
+          if (!tipos[m.tipoManutencao]) {
+            tipos[m.tipoManutencao] = { qtd: 0, total: 0 };
+          }
+          tipos[m.tipoManutencao].qtd++;
+          tipos[m.tipoManutencao].total += parseFloat(m.valor);
+        });
+
+        const tbody = document.getElementById("tabelaTipos");
+        tbody.innerHTML = "";
+
+        Object.keys(tipos).forEach((t) => {
+          const d = tipos[t];
+          tbody.innerHTML += `
+          <tr>
+            <td>${t}</td>
+            <td>${d.qtd}</td>
+            <td>R$ ${d.total.toFixed(2)}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>

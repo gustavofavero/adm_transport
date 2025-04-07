@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Financeiro por Oficina</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Financeiro por Oficina</h2>
+      <label>Período:</label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerar()">Gerar</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Oficina</th>
+            <th>Qtd. Serviços</th>
+            <th>Valor Total</th>
+            <th>Média por Serviço</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaFinanceiro"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerar() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const dados = JSON.parse(
+          localStorage.getItem("manutencoes") || "[]"
+        ).filter(
+          (m) => (!inicio || m.data >= inicio) && (!fim || m.data <= fim)
+        );
+
+        const oficinas = {};
+
+        dados.forEach((m) => {
+          if (!oficinas[m.oficina]) {
+            oficinas[m.oficina] = { total: 0, qtd: 0 };
+          }
+          oficinas[m.oficina].total += parseFloat(m.valor);
+          oficinas[m.oficina].qtd++;
+        });
+
+        const tbody = document.getElementById("tabelaFinanceiro");
+        tbody.innerHTML = "";
+
+        Object.keys(oficinas).forEach((o) => {
+          const d = oficinas[o];
+          const media = (d.total / d.qtd).toFixed(2);
+          tbody.innerHTML += `
+          <tr>
+            <td>${o}</td>
+            <td>${d.qtd}</td>
+            <td>R$ ${d.total.toFixed(2)}</td>
+            <td>R$ ${media}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ranking de Eficiência</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      canvas {
+        margin-top: 30px;
+        background: #fff;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Ranking de Eficiência (KM/L)</h2>
+      <label>Período: </label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerarRanking()">Gerar Ranking</button>
+
+      <canvas id="graficoRanking" width="900" height="400"></canvas>
+
+      <div class="botoes">
+        <button onclick="window.location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerarRanking() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const abastecimentos = JSON.parse(
+          localStorage.getItem("abastecimentos") || "[]"
+        )
+          .filter((a) => a.tanque === "Sim")
+          .filter(
+            (a) => (!inicio || a.data >= inicio) && (!fim || a.data <= fim)
+          );
+
+        const agrupado = {};
+
+        abastecimentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+        for (let i = 1; i < abastecimentos.length; i++) {
+          const atual = abastecimentos[i];
+          const anterior = abastecimentos[i - 1];
+          if (atual.placa === anterior.placa) {
+            const km = atual.km - anterior.km;
+            const litros = parseFloat(atual.litros);
+            const media = km / litros;
+
+            if (!agrupado[atual.placa]) {
+              agrupado[atual.placa] = [];
+            }
+            agrupado[atual.placa].push(media);
+          }
+        }
+
+        const mediasFinais = Object.keys(agrupado).map((placa) => {
+          const lista = agrupado[placa];
+          const mediaFinal = lista.reduce((a, b) => a + b, 0) / lista.length;
+          return { placa, media: mediaFinal };
+        });
+
+        const top5 = [...mediasFinais]
+          .sort((a, b) => b.media - a.media)
+          .slice(0, 5);
+        const bottom5 = [...mediasFinais]
+          .sort((a, b) => a.media - b.media)
+          .slice(0, 5);
+
+        const labels = [...top5, ...bottom5].map((d) => d.placa);
+        const dados = [...top5, ...bottom5].map((d) => d.media.toFixed(2));
+
+        const ctx = document.getElementById("graficoRanking").getContext("2d");
+        if (window.grafico) window.grafico.destroy();
+        window.grafico = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "KM por Litro",
+                data: dados,
+                backgroundColor: "steelblue",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

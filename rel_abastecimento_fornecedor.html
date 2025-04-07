@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Resumo por Fornecedor</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+      }
+      .container {
+        max-width: 1000px;
+        margin: 40px auto;
+        background: #fff;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 0 10px #ccc;
+      }
+      h2 {
+        margin-bottom: 10px;
+        font-size: 22px;
+        border-bottom: 2px solid #222;
+        padding-bottom: 4px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        padding: 8px;
+        border: 1px solid #ccc;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 30px;
+        display: flex;
+        justify-content: space-between;
+      }
+      input[type="date"] {
+        margin: 5px;
+        padding: 5px;
+      }
+      button {
+        padding: 10px 20px;
+        background-color: #222;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
+      button:hover {
+        background-color: #444;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Resumo de Abastecimentos por Fornecedor</h2>
+
+      <label>Período:</label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerar()">Gerar</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Fornecedor</th>
+            <th>Quantidade de Abastecimentos</th>
+            <th>Total Litros</th>
+            <th>Total R$</th>
+            <th>Média R$/L</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaFornecedor"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="location.href='relatorios.html'">⬅️ Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerar() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const abastecimentos = JSON.parse(
+          localStorage.getItem("abastecimentos") || "[]"
+        );
+
+        const filtro = abastecimentos.filter(
+          (a) => (!inicio || a.data >= inicio) && (!fim || a.data <= fim)
+        );
+
+        const fornecedores = {};
+
+        filtro.forEach((item) => {
+          const nome = item.fornecedor.toUpperCase();
+          if (!fornecedores[nome]) {
+            fornecedores[nome] = { qtd: 0, litros: 0, total: 0 };
+          }
+          fornecedores[nome].qtd++;
+          fornecedores[nome].litros += parseFloat(item.litros || 0);
+          fornecedores[nome].total += parseFloat(item.valor || 0);
+        });
+
+        const tbody = document.getElementById("tabelaFornecedor");
+        tbody.innerHTML = "";
+
+        Object.entries(fornecedores).forEach(([fornecedor, dados]) => {
+          const media = dados.total / dados.litros || 0;
+          tbody.innerHTML += `
+          <tr>
+            <td>${fornecedor}</td>
+            <td>${dados.qtd}</td>
+            <td>${dados.litros.toFixed(2)}</td>
+            <td>R$ ${dados.total.toFixed(2)}</td>
+            <td>R$ ${media.toFixed(2)}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>

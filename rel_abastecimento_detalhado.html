@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatório Detalhado de Abastecimentos</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Relatório Detalhado</h2>
+      <label>Período: </label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerarRelatorio()">Gerar Relatório</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Placa</th>
+            <th>KM</th>
+            <th>Tanque Cheio?</th>
+            <th>Fornecedor</th>
+            <th>Litros</th>
+            <th>Valor Total</th>
+            <th>KM/L</th>
+            <th>Nota Fiscal</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaDetalhado"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="window.location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerarRelatorio() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const dados = JSON.parse(
+          localStorage.getItem("abastecimentos") || "[]"
+        ).filter(
+          (a) => (!inicio || a.data >= inicio) && (!fim || a.data <= fim)
+        );
+
+        const tbody = document.getElementById("tabelaDetalhado");
+        tbody.innerHTML = "";
+
+        dados.forEach((d) => {
+          tbody.innerHTML += `
+          <tr>
+            <td>${d.data}</td>
+            <td>${d.placa}</td>
+            <td>${d.km}</td>
+            <td>${d.tanque}</td>
+            <td>${d.fornecedor}</td>
+            <td>${parseFloat(d.litros).toFixed(2)}</td>
+            <td>R$ ${parseFloat(d.valor).toFixed(2)}</td>
+            <td>${d.kml || "-"}</td>
+            <td>${d.notaFiscal}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>

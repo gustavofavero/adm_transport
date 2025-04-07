@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Ranking de Custo por Placa</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      canvas {
+        margin-top: 30px;
+        background: #fff;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Ranking de Placas com Maior Custo</h2>
+      <label>Período:</label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerarRanking()">Gerar Ranking</button>
+
+      <canvas id="graficoRanking" width="900" height="400"></canvas>
+
+      <div class="botoes">
+        <button onclick="window.location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerarRanking() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const dados = JSON.parse(
+          localStorage.getItem("manutencoes") || "[]"
+        ).filter(
+          (m) => (!inicio || m.data >= inicio) && (!fim || m.data <= fim)
+        );
+
+        const placas = {};
+
+        dados.forEach((m) => {
+          if (!placas[m.placa]) {
+            placas[m.placa] = { valor: 0 };
+          }
+          placas[m.placa].valor += parseFloat(m.valor);
+        });
+
+        const ranking = Object.entries(placas)
+          .map(([placa, obj]) => ({ placa, valor: obj.valor }))
+          .sort((a, b) => b.valor - a.valor)
+          .slice(0, 10);
+
+        const ctx = document.getElementById("graficoRanking").getContext("2d");
+        if (window.grafico) window.grafico.destroy();
+        window.grafico = new Chart(ctx, {
+          type: "bar",
+          data: {
+            labels: ranking.map((e) => e.placa),
+            datasets: [
+              {
+                label: "Custo Total R$",
+                data: ranking.map((e) => e.valor.toFixed(2)),
+                backgroundColor: "crimson",
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            scales: {
+              y: {
+                beginAtZero: true,
+              },
+            },
+          },
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatório: Consumo por Placa</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Consumo por Placa (KM/L)</h2>
+      <label>Período: </label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerarRelatorio()">Gerar Relatório</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>KM Percorridos</th>
+            <th>Litros</th>
+            <th>KM/L Médio</th>
+            <th>Abastecimentos Usados</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaConsumo"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="window.location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerarRelatorio() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const abastecimentos = JSON.parse(
+          localStorage.getItem("abastecimentos") || "[]"
+        )
+          .filter((a) => a.tanque === "Sim")
+          .filter(
+            (a) => (!inicio || a.data >= inicio) && (!fim || a.data <= fim)
+          );
+
+        const agrupado = {};
+
+        abastecimentos.sort((a, b) => new Date(a.data) - new Date(b.data));
+
+        for (let i = 1; i < abastecimentos.length; i++) {
+          const atual = abastecimentos[i];
+          const anterior = abastecimentos[i - 1];
+          if (atual.placa === anterior.placa) {
+            const kmPercorrido = atual.km - anterior.km;
+            const litros = parseFloat(atual.litros);
+            const kmPorLitro = kmPercorrido / litros;
+
+            if (!agrupado[atual.placa]) {
+              agrupado[atual.placa] = {
+                km: 0,
+                litros: 0,
+                qtd: 0,
+              };
+            }
+
+            agrupado[atual.placa].km += kmPercorrido;
+            agrupado[atual.placa].litros += litros;
+            agrupado[atual.placa].qtd++;
+          }
+        }
+
+        const tbody = document.getElementById("tabelaConsumo");
+        tbody.innerHTML = "";
+
+        Object.keys(agrupado).forEach((placa) => {
+          const dado = agrupado[placa];
+          const media = (dado.km / dado.litros).toFixed(2);
+          tbody.innerHTML += `
+          <tr>
+            <td>${placa}</td>
+            <td>${dado.km}</td>
+            <td>${dado.litros.toFixed(2)}</td>
+            <td>${media}</td>
+            <td>${dado.qtd}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>

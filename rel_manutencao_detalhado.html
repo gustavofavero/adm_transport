@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatório Detalhado de Manutenções</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 100%;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 6px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Relatório Detalhado de Manutenções</h2>
+      <label>Período:</label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerarRelatorio()">Gerar</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Data</th>
+            <th>Placa</th>
+            <th>Tipo</th>
+            <th>Tipo de Manutenção</th>
+            <th>Descrição</th>
+            <th>Valor</th>
+            <th>KM</th>
+            <th>Próxima Revisão</th>
+            <th>Oficina</th>
+            <th>Status</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaDetalhado"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerarRelatorio() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const dados = JSON.parse(
+          localStorage.getItem("manutencoes") || "[]"
+        ).filter(
+          (m) => (!inicio || m.data >= inicio) && (!fim || m.data <= fim)
+        );
+
+        const tbody = document.getElementById("tabelaDetalhado");
+        tbody.innerHTML = "";
+
+        dados.forEach((m) => {
+          tbody.innerHTML += `
+          <tr>
+            <td>${m.data}</td>
+            <td>${m.placa}</td>
+            <td>${m.tipo}</td>
+            <td>${m.tipoManutencao}</td>
+            <td>${m.descricao || "-"}</td>
+            <td>R$ ${parseFloat(m.valor).toFixed(2)}</td>
+            <td>${m.km}</td>
+            <td>${m.proximaRevisao || "-"}</td>
+            <td>${m.oficina}</td>
+            <td>${m.status}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Relatório: Gasto por Placa</title>
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .container {
+        max-width: 1000px;
+        margin: 20px auto;
+        padding: 20px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: center;
+      }
+      th {
+        background-color: #eee;
+      }
+      .botoes {
+        margin-top: 20px;
+        display: flex;
+        gap: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2>Gasto com Combustível por Placa</h2>
+      <label>Período: </label>
+      <input type="date" id="dataInicio" /> até
+      <input type="date" id="dataFim" />
+      <button onclick="gerarRelatorio()">Gerar Relatório</button>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Qtd. Abastecimentos</th>
+            <th>Total de Litros</th>
+            <th>Gasto Total (R$)</th>
+            <th>R$/Litro Médio</th>
+          </tr>
+        </thead>
+        <tbody id="tabelaFinanceiro"></tbody>
+      </table>
+
+      <div class="botoes">
+        <button onclick="window.location.href='relatorios.html'">Voltar</button>
+      </div>
+    </div>
+
+    <script>
+      function gerarRelatorio() {
+        const inicio = document.getElementById("dataInicio").value;
+        const fim = document.getElementById("dataFim").value;
+        const abastecimentos = JSON.parse(
+          localStorage.getItem("abastecimentos") || "[]"
+        ).filter(
+          (a) => (!inicio || a.data >= inicio) && (!fim || a.data <= fim)
+        );
+
+        const agrupado = {};
+
+        abastecimentos.forEach((a) => {
+          if (!agrupado[a.placa]) {
+            agrupado[a.placa] = { litros: 0, valor: 0, qtd: 0 };
+          }
+          agrupado[a.placa].litros += parseFloat(a.litros);
+          agrupado[a.placa].valor += parseFloat(a.valor);
+          agrupado[a.placa].qtd++;
+        });
+
+        const tbody = document.getElementById("tabelaFinanceiro");
+        tbody.innerHTML = "";
+
+        Object.keys(agrupado).forEach((placa) => {
+          const d = agrupado[placa];
+          const precoMedio = (d.valor / d.litros).toFixed(2);
+          tbody.innerHTML += `
+          <tr>
+            <td>${placa}</td>
+            <td>${d.qtd}</td>
+            <td>${d.litros.toFixed(2)}</td>
+            <td>R$ ${d.valor.toFixed(2)}</td>
+            <td>R$ ${precoMedio}</td>
+          </tr>
+        `;
+        });
+      }
+    </script>
+  </body>
+</html>
